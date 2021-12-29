@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+terracotta = {extras = ["recommended"], version = "*"}
+crick = "*"
+numpy = "*"
+cython = "*"
+ipython = "*"
+rich = "*"
+rasterio = "*"
+
+[dev-packages]
+black = "*"
+
+[requires]
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
