@@ -46,4 +46,4 @@ EOF
 
 ln -s /etc/nginx/sites-available/terracotta /etc/nginx/sites-enabled/terracotta && rm /etc/nginx/sites-enabled/default && systemctl restart nginx
 
-pip3 install Cython numpy gunicorn httplib2 pandas scipy rasterio rio-cogeo crick netCDF4 Flask dash pyproj dash-leaflet git+https://github.com/chapmanjacobd/terracotta.git@9bd58730f551258353c81c6e792b010c008cfc23#egg=terracotta
+pip3 install Cython numpy gunicorn rasterio crick terracotta
