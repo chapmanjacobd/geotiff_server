@@ -10,24 +10,26 @@ set -o pipefail       # pipe will exit with last non-zero status if applicable
 # set -o noclobber    # prevent output redirection using '>', '>&', '<>' from overwriting existing files
 
 
-tee /etc/systemd/system/terracotta.service <<EOF
+sudo tee /usr/lib/systemd/system/terracotta.service <<EOF
 [Unit]
-Description=Gunicorn Terracotta
+Description=UNLI Terracotta API
 After=network.target
 
 [Service]
 Restart=always
 RestartSec=30
-User=www-data
-Group=www-data
-WorkingDirectory=/root
-ExecStart=/usr/local/bin/gunicorn server:app --workers 2 --bind unix:root/terracotta.sock -m 007
+Group=nginx
+WorkingDirectory=/home/production/admin/geotiff_server/
+Environment="PATH=/home/production/admin/.local/share/virtualenvs/geotiff_server-T2ZenFjo/bin"
+ExecStart=/home/production/admin/.local/share/virtualenvs/geotiff_server-T2ZenFjo/bin/gunicorn server:app --workers 2 --bind unix:/run/terracotta.sock -m 007
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
+systemctl daemon-reload
 systemctl enable --now terracotta
+systemctl restart terracotta
 
 tee /etc/nginx/sites-available/terracotta <<EOF
 server {
@@ -37,13 +39,10 @@ server {
     listen [::]:443 default_server ssl http2;
     server_name _;
 
-    location /api/ {
-        include proxy_params;
-        proxy_pass http://unix:/root/terracotta.sock:/;
+    location /webmap/ {
+        proxy_pass http://unix:/run/terracotta.sock:/;
     }
 }
 EOF
 
 ln -s /etc/nginx/sites-available/terracotta /etc/nginx/sites-enabled/terracotta && rm /etc/nginx/sites-enabled/default && systemctl restart nginx
-
-pip3 install Cython numpy gunicorn rasterio crick terracotta
