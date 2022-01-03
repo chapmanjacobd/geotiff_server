@@ -3,12 +3,8 @@ import os
 import sqlite3
 import sys
 from glob import glob
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Union, cast
-import warnings
+from typing import Any, Dict, List, Mapping, Sequence, Tuple, Union, cast
 import numpy as np
-import pandas as pd
-import rasterio
-import rasterio.mask
 from IPython.core import ultratb
 from joblib import Parallel, delayed
 from rasterio.dtypes import get_minimum_dtype
@@ -136,6 +132,8 @@ def compute_metadata(key, filepath) -> Dict[str, Any]:
         if valid_px_count == 0:
             print("No valid pixels found!")
             print(filepath)
+            os.unlink(filepath)
+            return
 
         (unique, counts) = np.unique(valid_data, return_counts=True)
         count_index_sort = np.argsort(-counts)
@@ -197,9 +195,10 @@ def refresh_datasets(conn):
     if not keys_to_add and not keys_to_remove:
         return
 
-    new_metadata = Parallel(n_jobs=4)(
+    new_metadata = Parallel(n_jobs=3)(
         delayed(compute_metadata)(key, f"data/{key}.tif") for key in keys_to_add
     )
+    new_metadata = list(filter(lambda x: x != None, new_metadata))
     print(new_metadata)
     for key, metadata in new_metadata:
         insert(conn, [key], f"data/{key}.tif", metadata=metadata)
