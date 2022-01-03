@@ -12,6 +12,11 @@ ipython = "*"
 rich = "*"
 rasterio = "*"
 gunicorn = "*"
+joblib = "*"
+pandas = "*"
 
 [dev-packages]
 black = "*"
+
+[pipenv]
+allow_prereleases = true
