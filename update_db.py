@@ -114,6 +114,7 @@ def compute_metadata(key, filepath) -> Dict[str, Any]:
     import rasterio
     from rasterio import warp
 
+    print(filepath)
     with rasterio.open(filepath) as raster_data:
         bounds = warp.transform_bounds(
             raster_data.crs, "epsg:4326", *raster_data.bounds, densify_pts=21
@@ -181,7 +182,7 @@ def refresh_datasets(conn):
 
         return {keytuple(row): row["filepath"] for row in rows}
 
-    new_files = {filename_to_keys(f) for f in glob("data/*.tif")[:1]}
+    new_files = {filename_to_keys(f) for f in glob("data/*.tif")}
     existing = set(map(lambda x: x[0], get_datasets(conn).keys()))
 
     keys_to_add = new_files - existing
