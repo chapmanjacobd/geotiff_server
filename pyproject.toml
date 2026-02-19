@@ -1,0 +1,22 @@
+[project]
+name = "geotiff-server"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "crick>=0.0.8",
+    "cython>=3.2.4",
+    "gunicorn>=25.1.0",
+    "ipython>=9.10.0",
+    "joblib>=1.5.3",
+    "pandas>=3.0.1",
+    "rasterio>=1.5.0",
+    "rich>=14.3.2",
+    "terracotta[recommended]>=0.10.1",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.1.0",
+]

@@ -20,8 +20,8 @@ Restart=always
 RestartSec=30
 Group=nginx
 WorkingDirectory=/home/production/admin/geotiff_server/
-Environment="PATH=/home/production/admin/.local/share/virtualenvs/geotiff_server-T2ZenFjo/bin"
-ExecStart=/home/production/admin/.local/share/virtualenvs/geotiff_server-T2ZenFjo/bin/gunicorn server:app --workers 2 --bind unix:/run/terracotta.sock -m 007
+Environment="PATH=/home/production/admin/geotiff_server/.venv/bin"
+ExecStart=/home/production/admin/geotiff_server/.venv/bin/gunicorn server:app --workers 2 --bind unix:/run/terracotta.sock -m 007
 
 [Install]
 WantedBy=multi-user.target

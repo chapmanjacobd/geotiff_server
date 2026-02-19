@@ -23,7 +23,7 @@
 mkdir data/
 wget -P data/ https://github.com/chapmanjacobd/rasters/raw/main/osm/osm_power_supply.tif
 wget -P data/ https://github.com/chapmanjacobd/rasters/raw/main/ookla/ookla_mobile_downloadkbps_2021q1.tif
-pipenv install
-pipenv run python -m create_db
-pipenv run python -m server
+uv sync
+uv run update_db.py
+uv run server.py
 ```
