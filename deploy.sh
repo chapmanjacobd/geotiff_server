@@ -18,11 +18,10 @@ After=network.target
 [Service]
 Restart=always
 RestartSec=30
-User=production
 Group=nginx
-WorkingDirectory=/home/production/admin/geotiff_server/
-Environment="PATH=/home/production/admin/geotiff_server/.venv/bin"
-ExecStart=/home/production/admin/geotiff_server/.venv/bin/gunicorn server:app --workers 2 --bind unix:/run/terracotta.sock -m 007 --no-control-socket
+WorkingDirectory=/home/xk/github/geotiff_server/
+Environment="PATH=/home/xk/github/geotiff_server/.venv/bin"
+ExecStart=/home/xk/github/geotiff_server/.venv/bin/gunicorn server:app --workers 2 --bind unix:/run/terracotta.sock -m 007 --no-control-socket
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=full

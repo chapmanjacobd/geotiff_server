@@ -17,7 +17,9 @@ def filename_to_keys(filename: str) -> Dict[str, str]:
 
 
 def create_schema(driver: terracotta.drivers.base.TerracottaDriver) -> None:
-    driver.create(keys=["file"], key_descriptions={"file": "The filename of the dataset"})
+    driver.create(
+        keys=["file"], key_descriptions={"file": "The filename of the dataset"}
+    )
 
 
 def process_file(filepath):
@@ -33,7 +35,9 @@ def process_file(filepath):
         return None
 
 
-def refresh_datasets(driver: terracotta.drivers.base.TerracottaDriver, force: bool = False):
+def refresh_datasets(
+    driver: terracotta.drivers.base.TerracottaDriver, force: bool = False
+):
     # Use full paths for comparison
     new_files = {os.path.normpath(f) for f in glob("data/*.tif")}
 
@@ -46,7 +50,7 @@ def refresh_datasets(driver: terracotta.drivers.base.TerracottaDriver, force: bo
         files_to_add = new_files
     else:
         files_to_add = new_files - existing
-    
+
     files_to_remove = existing - new_files
 
     print(f"Adding/Updating: {len(files_to_add)} files")
@@ -55,9 +59,7 @@ def refresh_datasets(driver: terracotta.drivers.base.TerracottaDriver, force: bo
     if not files_to_add and not files_to_remove:
         return
 
-    results = Parallel(n_jobs=4)(
-        delayed(process_file)(f) for f in files_to_add
-    )
+    results = Parallel(n_jobs=4)(delayed(process_file)(f) for f in files_to_add)
 
     for result in results:
         if result:
