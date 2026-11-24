@@ -18,10 +18,15 @@ After=network.target
 [Service]
 Restart=always
 RestartSec=30
+User=production
 Group=nginx
 WorkingDirectory=/home/production/admin/geotiff_server/
 Environment="PATH=/home/production/admin/geotiff_server/.venv/bin"
-ExecStart=/home/production/admin/geotiff_server/.venv/bin/gunicorn server:app --workers 2 --bind unix:/run/terracotta.sock -m 007
+ExecStart=/home/production/admin/geotiff_server/.venv/bin/gunicorn server:app --workers 2 --bind unix:/run/terracotta.sock -m 007 --no-control-socket
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
 
 [Install]
 WantedBy=multi-user.target
@@ -38,6 +43,10 @@ server {
     listen 443 default_server ssl http2;
     listen [::]:443 default_server ssl http2;
     server_name _;
+    server_tokens off;
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy no-referrer always;
 
     location /webmap/ {
         proxy_pass http://unix:/run/terracotta.sock:/;

@@ -27,3 +27,23 @@ uv sync
 uv run update_db.py
 uv run server.py
 ```
+
+## Configuration and security
+
+Terracotta reads `TC_*` environment variables, but settings in `config.py` take
+precedence. CORS origins are JSON lists and can be restricted without editing
+the file:
+
+```sh
+TC_ALLOWED_ORIGINS_TILES='["https://example.com"]' uv run server.py
+```
+
+Debug mode is off by default because the Werkzeug debugger allows arbitrary
+code execution. Only enable it for local development:
+
+```sh
+TC_DEBUG=true uv run server.py
+```
+
+Run `uv audit` after changing dependencies to check for known vulnerabilities.
+
